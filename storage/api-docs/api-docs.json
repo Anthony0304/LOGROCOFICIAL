@@ -1,0 +1,657 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API-ANTHONY GANCHOZO",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "summary": "Registrar un nuevo usuario",
+                "description": "Este endpoint se utiliza para registrar un nuevo usuario.",
+                "operationId": "createUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario registrado exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "summary": "Iniciar sesión",
+                "description": "Este endpoint se utiliza para que un usuario inicie sesión en la aplicación.",
+                "operationId": "loginUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesión exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales inválidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Credenciales inválidas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/listado-candidatos": {
+            "get": {
+                "summary": "Obtener listado de candidatos, lista y tipo de candidato",
+                "description": "Este endpoint se utiliza para obtener un listado de candidatos junto con la lista a la que pertenecen y el tipo de candidato.",
+                "operationId": "getListadoCandidatos",
+                "responses": {
+                    "200": {
+                        "description": "Listado de candidatos obtenido exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "Listado de Candidatos": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "descripcion": {
+                                                        "type": "string"
+                                                    },
+                                                    "lista": {
+                                                        "type": "string"
+                                                    },
+                                                    "tipo_candidato": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/candidatos/con-votos": {
+            "get": {
+                "summary": "Obtener listado de candidatos con sus votos",
+                "description": "Este endpoint se utiliza para obtener un listado de candidatos junto con la cantidad total de votos que han recibido.",
+                "operationId": "getListadoCandidatosConVotos",
+                "responses": {
+                    "200": {
+                        "description": "Listado de candidatos con votos obtenido exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "Listado de Candidatos con Votos": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "descripcion": {
+                                                        "description": "Descripción del candidato",
+                                                        "type": "string"
+                                                    },
+                                                    "lista": {
+                                                        "description": "Lista a la que pertenece el candidato",
+                                                        "type": "string"
+                                                    },
+                                                    "tipo_candidato": {
+                                                        "description": "Tipo de candidato",
+                                                        "type": "string"
+                                                    },
+                                                    "total_votos": {
+                                                        "description": "Total de votos recibidos por el candidato",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ingresar-voto": {
+            "post": {
+                "summary": "Ingresar un nuevo voto",
+                "description": "Este endpoint permite ingresar un nuevo voto para un candidato específico.",
+                "operationId": "ingresarVoto",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IngresarVotoRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Voto ingresado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Voto ingresado exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en la solicitud",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/actualizar-candidato/{id}": {
+            "put": {
+                "summary": "Actualizar información de un candidato",
+                "description": "Este endpoint permite actualizar la información de un candidato específico.",
+                "operationId": "actualizarCandidato",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del candidato",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActualizarCandidatoRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Información del candidato actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Información del candidato actualizada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en la solicitud",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Candidato no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/eliminar-candidato/{id}": {
+            "delete": {
+                "summary": "Eliminar un candidato",
+                "description": "Este endpoint permite eliminar un candidato específico.",
+                "operationId": "eliminarCandidato",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del candidato",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Candidato eliminado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Candidato eliminado exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Candidato no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateUserRequest": {
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginUserRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CandidatoInfo": {
+                "properties": {
+                    "descripcion": {
+                        "description": "Descripción del candidato",
+                        "type": "string"
+                    },
+                    "lista": {
+                        "description": "Descripción de la lista a la que pertenece",
+                        "type": "string"
+                    },
+                    "tipo_candidato": {
+                        "description": "Descripción del tipo de candidato",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CandidatoConVotos": {
+                "properties": {
+                    "descripcion": {
+                        "description": "Descripción del candidato",
+                        "type": "string"
+                    },
+                    "lista": {
+                        "description": "Lista a la que pertenece el candidato",
+                        "type": "string"
+                    },
+                    "tipo_candidato": {
+                        "description": "Tipo de candidato",
+                        "type": "string"
+                    },
+                    "total_votos": {
+                        "description": "Total de votos recibidos por el candidato",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "IngresarVotoRequest": {
+                "required": [
+                    "idcandidato",
+                    "votos"
+                ],
+                "properties": {
+                    "idcandidato": {
+                        "description": "ID del candidato",
+                        "type": "integer"
+                    },
+                    "votos": {
+                        "description": "Cantidad de votos a ingresar",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "ActualizarCandidatoRequest": {
+                "required": [
+                    "descripcion",
+                    "idlista",
+                    "idtipocandidato",
+                    "foto"
+                ],
+                "properties": {
+                    "descripcion": {
+                        "description": "Descripción del candidato",
+                        "type": "string"
+                    },
+                    "idlista": {
+                        "description": "ID de la lista a la que pertenece",
+                        "type": "integer"
+                    },
+                    "idtipocandidato": {
+                        "description": "ID del tipo de candidato",
+                        "type": "integer"
+                    },
+                    "foto": {
+                        "description": "URL de la foto del candidato",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "EliminarCandidatoResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Candidato eliminado exitosamente"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
